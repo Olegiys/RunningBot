@@ -8,7 +8,7 @@ import java.util.Scanner;
 public class RunningBot {
     String choice;
     int choice2;
-    //Бла
+    //Бла-бла
     public void ChooseRunningType() throws IOException {
         boolean ChooseRunningType;
         do {
