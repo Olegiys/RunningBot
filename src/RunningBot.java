@@ -10,7 +10,7 @@ public class RunningBot {
     int choice2;
     //Бла-бла
     public void ChooseRunningType() throws IOException {
-        boolean ChooseRunningType;
+        boolean RunningTypeIsChosen;
         do {
             System.out.println("Какой вид бега вы планируете использовать?");
             System.out.println("Выберите из предложенных вариантов. Введите цифрцу 1 для Равномерного бега" +
@@ -28,14 +28,14 @@ public class RunningBot {
                     break;
                 } else if (choice.equals("2")) {
                     System.out.println("В данный момент, к сожалению, данная функция не доступна\n");
-                    ChooseRunningType = true;
+                    RunningTypeIsChosen = true;
                 }
                 else {
                     System.out.println("Выберите из предложенных вариантов. Введите цифрцу 1 для Равномерного бега" +
                             " и цифру 2 для Интервального\n");
-                    ChooseRunningType = true;
+                    RunningTypeIsChosen = true;
                 }
-        } while (ChooseRunningType == true);
+        } while (RunningTypeIsChosen == true);
     }
     public void KnownParameters() throws IOException {
         boolean KnownParameters = false;
