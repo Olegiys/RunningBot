@@ -19,7 +19,6 @@ public class RunningBot {
             System.out.println(" 2. Интервальный\n");
             System.out.print("Bыбepитe (q - выход): ");
             Scanner scan = new Scanner(System.in);
-            try {
                 choice = scan.nextLine();
                 if (StopWord(choice)==true){
                     break;
@@ -36,18 +35,11 @@ public class RunningBot {
                             " и цифру 2 для Интервального\n");
                     ChooseRunningType = true;
                 }
-            } catch (InputMismatchException e) {
-                System.out.println("Нужно ввести именно цифры.\n");
-                System.out.println(e);
-                ChooseRunningType = true;
-            }
         } while (ChooseRunningType == true);
     }
     public void KnownParameters() throws IOException {
         boolean KnownParameters = false;
-        boolean WrongType = false;
         do {
-            do {
                 System.out.println("Что Вы знаете о своей будущей тренировке?");
                 System.out.println(" 1. Я знаю расстояние и время за которое я хочу пробежать," +
                         " но не знаю необходимую скорость для этого");
@@ -58,27 +50,22 @@ public class RunningBot {
                 Scanner scan2 = new Scanner(System.in);
                 try {
                     choice2 = scan2.nextInt();
-                    WrongType = false;
-                } catch (Exception e) {
-                    System.out.println("Выберите из предложенных вариантов. 1 для расчета скорости, 2 для расчета времени," +
-                            " 3 для расчета расстояния\n");
-                    WrongType = true;
-                }
-            } while (WrongType == true);
+                    KnownParameters = true;
+                } catch (Exception e) {}
             switch (choice2) {
                 case 1:
                     long distance= Distance();
                     ArrayList <Integer> TimeHMS;
                     TimeHMS=Time(distance);
                     PaceComputing(distance,TimeHMS.get(0),TimeHMS.get(1),TimeHMS.get(2));
-                    KnownParameters = false;
+                    KnownParameters = true;
                     break;
                 case 2:
                     long distance1= Distance();
                     ArrayList <Integer> TempoHM;
                     TempoHM=Tempo(distance1);
                     TempoComputing(distance1,TempoHM.get(0), TempoHM.get(1));
-                    KnownParameters = false;
+                    KnownParameters = true;
                     break;
                 case 3:
                     ArrayList <Integer> TimeHMS1;
@@ -86,15 +73,15 @@ public class RunningBot {
                     ArrayList <Integer> TempoHM1;
                     TempoHM1=Tempo((long) 0);
                     DistanceComputing(TimeHMS1.get(0),TimeHMS1.get(1),TimeHMS1.get(2),TempoHM1.get(0),TempoHM1.get(1));
-                    KnownParameters = false;
+                    KnownParameters = true;
                     break;
                 default:
                     System.out.println("Выберите из предложенных вариантов. 1 для расчета скорости, 2 для расчета времени," +
                             " 3 для расчета расстояния\n");
-                    KnownParameters = true;
+                    KnownParameters = false;
                     break;
             }
-        } while(KnownParameters==true);
+        } while(KnownParameters == false);
     }
     public long Distance(){
         boolean WrongDistance=false;
