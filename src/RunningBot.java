@@ -2,7 +2,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;
-
+// трам парам
 public class RunningBot {
     static String choice;
     static String choice2;
