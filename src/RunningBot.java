@@ -24,11 +24,14 @@ public class RunningBot {
             switch (choice) {
                 case "1" -> {
                     SimpleWorkout simpleWorkout = new SimpleWorkout();
+                    simpleWorkout.setHasWarmUpAndCoolDown(simpleWorkout.AskWarmUpAndCoolDown());
+                    System.out.println(simpleWorkout.getHasWarmUpAndCoolDown());
                     simpleWorkout.AskKnownParameters(simpleWorkout.ASK_SIMPLE_PARAMETERS);
                     RunningTypeIsChosen = true;
                 }
                 case "2" -> {
                     IntervalWorkout intervalWorkout = new IntervalWorkout();
+                    intervalWorkout.setHasWarmUpAndCoolDown(intervalWorkout.AskWarmUpAndCoolDown());
                     intervalWorkout.AskKnownParameters(intervalWorkout.ASK_HARD_INTERVAL_PARAMETERS);
                     System.out.println("В данный момент, к сожалению, данная функция не доступна\n");}
                 default -> System.out.println("Выберите из предложенных вариантов. Введите цифрцу 1 для Равномерного бега" +

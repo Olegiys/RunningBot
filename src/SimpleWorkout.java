@@ -6,12 +6,19 @@ public class SimpleWorkout {
     private long Total_distance = 0;
     private ArrayList<Integer> Time = new ArrayList<>();
     private ArrayList <Integer> Average_TempoMS = new ArrayList<>();
+    private boolean HasWarmUpAndCoolDown;
     static Scanner scan = new Scanner(System.in);
     static String choice2;
-    protected String ASK_SIMPLE_PARAMETERS = "Что Вы знаете о своей будущей тренировке?\n" +
+    boolean CorrectAnswer = false;
+    protected String ASK_SIMPLE_PARAMETERS =
+            "Что Вы знаете о своей будущей тренировке?\n" +
             "1. Я знаю расстояние и время за которое я хочу пробежать, но не знаю необходимую скорость для этого\n" +
             "2. Я знаю расстояние и скорость с которой я хочу бежать, но не знаю сколько времени это займёт\n" +
             "3. Я знаю сколько времени и с какой скоростью я хочу бежать, но не знаю какое расстояние я пробегу\n";
+    protected String ASK_WARM_AUP_AND_COOL_DOWN =
+            "В тренировке будет разминка и заминка? Введите 1 или 2.\n" +
+            "1. Да\n" +
+            "2. Нет\n";
 
     public SimpleWorkout () {}
     public void setTotal_distance(long total_distance) {
@@ -26,6 +33,10 @@ public class SimpleWorkout {
         Average_TempoMS = average_TempoMS;
     }
 
+    public void setHasWarmUpAndCoolDown(boolean hasWarmUpAndCoolDown) {
+        HasWarmUpAndCoolDown = hasWarmUpAndCoolDown;
+    }
+
     public long getTotal_distance() {
         return Total_distance;
     }
@@ -36,6 +47,10 @@ public class SimpleWorkout {
 
     public ArrayList<Integer> getAverage_TempoMS() {
         return Average_TempoMS;
+    }
+
+    public boolean getHasWarmUpAndCoolDown() {
+        return HasWarmUpAndCoolDown;
     }
 
     public long DistanceComputing(ArrayList<Integer> HMSNumeric, ArrayList<Integer> TempoMS){
@@ -86,6 +101,23 @@ public class SimpleWorkout {
         TempoMS.add(sec);
         return TempoMS;
     }
+    public boolean AskWarmUpAndCoolDown () {
+        do {
+            System.out.println(ASK_WARM_AUP_AND_COOL_DOWN);
+            String answer = scan.nextLine();
+            switch (answer){
+                case "1" -> {
+                    CorrectAnswer = true;
+                    return true;
+                }
+                case "2" -> {
+                    return false;
+                }
+                default -> System.out.println("Выберите из предложенных вариантов. 1 Если есть разминка и заминка 2 если разминки и заминки нет\n");
+            }
+        } while (CorrectAnswer == false);
+        return true;
+    }
     public void AskKnownParameters(String ASK_SIMPLE_PARAMETERS) {
         boolean KnownParameters = false;
         do {
@@ -98,24 +130,22 @@ public class SimpleWorkout {
             }
             switch (choice2) {
                 case "1" -> {
-                    SimpleWorkout simpleWorkout = new SimpleWorkout();
-                    simpleWorkout.setTotal_distance(AskDistance());
-                    simpleWorkout.setTime(AskTime(simpleWorkout.getTotal_distance()));
-                    simpleWorkout.setAverage_TempoMS(simpleWorkout.PaceComputing(simpleWorkout.getTotal_distance(), simpleWorkout.getTime()));
+                    setTotal_distance(AskDistance());
+                    setTime(AskTime(getTotal_distance()));
+                    setAverage_TempoMS(PaceComputing(getTotal_distance(), getTime()));
                     KnownParameters = true;
                 }
                 case "2" -> {
-                    SimpleWorkout simpleWorkout = new SimpleWorkout();
-                    simpleWorkout.setTotal_distance(AskDistance());
-                    simpleWorkout.setAverage_TempoMS(AskTempo(simpleWorkout.getTotal_distance()));
-                    simpleWorkout.setTime(simpleWorkout.TimeComputing(simpleWorkout.getTotal_distance(), simpleWorkout.getAverage_TempoMS()));
+
+                    setTotal_distance(AskDistance());
+                    setAverage_TempoMS(AskTempo(getTotal_distance()));
+                    setTime(TimeComputing(getTotal_distance(), getAverage_TempoMS()));
                     KnownParameters = true;
                 }
                 case "3" -> {
-                    SimpleWorkout simpleWorkout = new SimpleWorkout();
-                    simpleWorkout.setTime(AskTime(simpleWorkout.getTotal_distance()));
-                    simpleWorkout.setAverage_TempoMS(AskTempo(simpleWorkout.getTotal_distance()));
-                    simpleWorkout.setTotal_distance(simpleWorkout.DistanceComputing(simpleWorkout.getTime(), simpleWorkout.getAverage_TempoMS()));
+                    setTime(AskTime(getTotal_distance()));
+                    setAverage_TempoMS(AskTempo(getTotal_distance()));
+                    setTotal_distance(DistanceComputing(getTime(), getAverage_TempoMS()));
                     KnownParameters = true;
                 }
                 default -> System.out.println("Выберите из предложенных вариантов. 1 для расчета скорости, 2 для расчета времени," +
