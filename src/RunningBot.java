@@ -13,7 +13,7 @@ public class RunningBot {
                     "Выберите из предложенных вариантов. Введите цифрцу 1 для Равномерного бега и цифру 2 для Интервального\n " +
                     "1. Равномерный\n " +
                     "2. Интервальный\n " +
-                    "Bыбepитe (q - выход): \n");
+                    "Bыбepитe (q - выход):");
             try {
                 choice = scan.nextLine();
             } catch (Exception e) {}
@@ -25,14 +25,19 @@ public class RunningBot {
                 case "1" -> {
                     SimpleWorkout simpleWorkout = new SimpleWorkout();
                     simpleWorkout.setHasWarmUpAndCoolDown(simpleWorkout.AskWarmUpAndCoolDown());
+                    if (simpleWorkout.getHasWarmUpAndCoolDown())
+                        simpleWorkout.AskKnownParameters_WarmUp_CoolDown();
                     System.out.println(simpleWorkout.getHasWarmUpAndCoolDown());
-                    simpleWorkout.AskKnownParameters(simpleWorkout.ASK_SIMPLE_PARAMETERS);
+                    simpleWorkout.AskKnownParameters_Training();
                     RunningTypeIsChosen = true;
                 }
                 case "2" -> {
                     IntervalWorkout intervalWorkout = new IntervalWorkout();
                     intervalWorkout.setHasWarmUpAndCoolDown(intervalWorkout.AskWarmUpAndCoolDown());
-                    intervalWorkout.AskKnownParameters(intervalWorkout.ASK_HARD_INTERVAL_PARAMETERS);
+                    if (intervalWorkout.getHasWarmUpAndCoolDown())
+                        intervalWorkout.AskKnownParameters_WarmUp_CoolDown();
+                    intervalWorkout.AskIntervalQuantity();
+                    intervalWorkout.AskKnownParameters_Training();
                     System.out.println("В данный момент, к сожалению, данная функция не доступна\n");}
                 default -> System.out.println("Выберите из предложенных вариантов. Введите цифрцу 1 для Равномерного бега" +
                         " и цифру 2 для Интервального\n");

@@ -3,50 +3,70 @@ import java.util.Arrays;
 import java.util.Scanner;
 
 public class SimpleWorkout {
+    private long WarmUp_CoolDown_distance = 0;
+    private ArrayList<Integer> WarmUp_CoolDown_Time = new ArrayList<>();
+    private ArrayList <Integer> WarmUp_CoolDown_Average_TempoMS = new ArrayList<>();
+    private long Hard_Training_distance = 0;
+    private ArrayList<Integer> Hard_Training_Time = new ArrayList<>();
+    private ArrayList <Integer> Hard_Training_TempoMS = new ArrayList<>();
     private long Total_distance = 0;
-    private ArrayList<Integer> Time = new ArrayList<>();
+    private ArrayList<Integer> Total_Time = new ArrayList<>();
     private ArrayList <Integer> Average_TempoMS = new ArrayList<>();
     private boolean HasWarmUpAndCoolDown;
     static Scanner scan = new Scanner(System.in);
-    static String choice2;
-    boolean CorrectAnswer = false;
-    protected String ASK_SIMPLE_PARAMETERS =
-            "Что Вы знаете о своей будущей тренировке?\n" +
-            "1. Я знаю расстояние и время за которое я хочу пробежать, но не знаю необходимую скорость для этого\n" +
-            "2. Я знаю расстояние и скорость с которой я хочу бежать, но не знаю сколько времени это займёт\n" +
-            "3. Я знаю сколько времени и с какой скоростью я хочу бежать, но не знаю какое расстояние я пробегу\n";
-    protected String ASK_WARM_AUP_AND_COOL_DOWN =
-            "В тренировке будет разминка и заминка? Введите 1 или 2.\n" +
-            "1. Да\n" +
-            "2. Нет\n";
+
+    protected String ASK_SIMPLE_DISTANCE = "Какое расстояние Вы хотите пробежать? Введите расстояние в метрах";
+    protected String ASK_WARMUP_COOLDOWN_DISTANCE =
+            "Какое расстояние Вы хотите пробежать на разминке " +
+                    "(такое же расстояние будет установлено и для заминки)" +
+                    "? Введите расстояние в метрах";
 
     public SimpleWorkout () {}
     public void setTotal_distance(long total_distance) {
         Total_distance = total_distance;
     }
+    public void setWarmUp_CoolDown_distance(long warmUp_CoolDown_distance) {
+        WarmUp_CoolDown_distance = warmUp_CoolDown_distance;
+    }
 
-    public void setTime(ArrayList<Integer> time) {
-        Time = time;
+    public void set_Total_Time(ArrayList<Integer> time) {
+        Total_Time = time;
+    }
+    public void setWarmUp_CoolDown_Time(ArrayList<Integer> warmUp_CoolDown_Time) {
+        WarmUp_CoolDown_Time = warmUp_CoolDown_Time;
     }
 
     public void setAverage_TempoMS(ArrayList<Integer> average_TempoMS) {
         Average_TempoMS = average_TempoMS;
+    }
+    public void setWarmUp_CoolDown_Average_TempoMS(ArrayList<Integer> warmUp_CoolDown_Average_TempoMS) {
+        WarmUp_CoolDown_Average_TempoMS = warmUp_CoolDown_Average_TempoMS;
     }
 
     public void setHasWarmUpAndCoolDown(boolean hasWarmUpAndCoolDown) {
         HasWarmUpAndCoolDown = hasWarmUpAndCoolDown;
     }
 
+
     public long getTotal_distance() {
         return Total_distance;
     }
+    public long getWarmUp_CoolDown_distance() {
+        return WarmUp_CoolDown_distance;
+    }
 
-    public ArrayList<Integer> getTime() {
-        return Time;
+    public ArrayList<Integer> get_Total_Time() {
+        return Total_Time;
+    }
+    public ArrayList<Integer> getWarmUp_CoolDown_Time() {
+        return WarmUp_CoolDown_Time;
     }
 
     public ArrayList<Integer> getAverage_TempoMS() {
         return Average_TempoMS;
+    }
+    public ArrayList<Integer> getWarmUp_CoolDown_Average_TempoMS() {
+        return WarmUp_CoolDown_Average_TempoMS;
     }
 
     public boolean getHasWarmUpAndCoolDown() {
@@ -94,16 +114,17 @@ public class SimpleWorkout {
         int tempTempo = (int) tempo;
         double tempo2 = tempo - tempTempo;
         int sec = (int) (0.6 * (tempo2 * 100));
-        System.out.println("Для того что бы пробежать " + distance + " м. за " + HMSNumeric.get(0) + " ч. "
-                + HMSNumeric.get(1) + " мин. " + HMSNumeric.get(2) + " сек. , Вам нужно бежать в темпе " + tempTempo + "'" + sec + "'' на киллометр");
         ArrayList <Integer> TempoMS = new ArrayList<>();
         TempoMS.add(tempTempo);
         TempoMS.add(sec);
         return TempoMS;
     }
     public boolean AskWarmUpAndCoolDown () {
+        boolean CorrectAnswer = false;
         do {
-            System.out.println(ASK_WARM_AUP_AND_COOL_DOWN);
+            System.out.println("В тренировке будет разминка и заминка? Введите 1 или 2.\n" +
+                    "1. Да\n" +
+                    "2. Нет\n");
             String answer = scan.nextLine();
             switch (answer){
                 case "1" -> {
@@ -118,34 +139,71 @@ public class SimpleWorkout {
         } while (CorrectAnswer == false);
         return true;
     }
-    public void AskKnownParameters(String ASK_SIMPLE_PARAMETERS) {
+    public void AskKnownParameters_WarmUp_CoolDown() {
         boolean KnownParameters = false;
         do {
-            System.out.println(ASK_SIMPLE_PARAMETERS);
-            try {
-                choice2 = scan.nextLine();
-            } catch (Exception e) {}
+            System.out.println("Что Вы знаете о своей разминке/заминке?\n" +
+                    "1. Я знаю расстояние и время\n" +
+                    "2. Я знаю расстояние и темп\n" +
+                    "3. Я знаю время и скорость\n");
+            String choice2 = scan.nextLine();
             if (RunningBot.StopWord(choice2)){
                 break;
             }
             switch (choice2) {
                 case "1" -> {
-                    setTotal_distance(AskDistance());
-                    setTime(AskTime(getTotal_distance()));
-                    setAverage_TempoMS(PaceComputing(getTotal_distance(), getTime()));
+                    setWarmUp_CoolDown_distance(AskDistance(ASK_WARMUP_COOLDOWN_DISTANCE));
+                    setWarmUp_CoolDown_Time(AskTime_WarmUp_CoolDown(getWarmUp_CoolDown_distance()));
+                    setWarmUp_CoolDown_Average_TempoMS(PaceComputing(getWarmUp_CoolDown_distance(), getWarmUp_CoolDown_Time()));
+                    KnownParameters = true;
+                }
+                case "2" -> {
+                    setWarmUp_CoolDown_distance(AskDistance(ASK_WARMUP_COOLDOWN_DISTANCE));
+                    setWarmUp_CoolDown_Average_TempoMS(AskTempo_WarmUp_CoolDown(getWarmUp_CoolDown_distance()));
+                    setWarmUp_CoolDown_Time(TimeComputing(getWarmUp_CoolDown_distance(), getWarmUp_CoolDown_Average_TempoMS()));
+                    KnownParameters = true;
+                }
+                case "3" -> {
+                    setWarmUp_CoolDown_Time(AskTime_WarmUp_CoolDown(getWarmUp_CoolDown_distance()));
+                    setWarmUp_CoolDown_Average_TempoMS(AskTempo_WarmUp_CoolDown(getWarmUp_CoolDown_distance()));
+                    setWarmUp_CoolDown_distance(DistanceComputing(getWarmUp_CoolDown_Time(), getWarmUp_CoolDown_Average_TempoMS()));
+                    KnownParameters = true;
+                }
+                default -> System.out.println("Выберите из предложенных вариантов. Если хотите выйти - введите q\n");
+            }
+        } while(!KnownParameters);
+    }
+    public void AskKnownParameters_Training() {
+        boolean KnownParameters = false;
+        do {
+            System.out.println("Что Вы знаете о своей будущей тренировке?\n" +
+                    "1. Я знаю расстояние и время за которое я хочу пробежать, но не знаю необходимую скорость для этого\n" +
+                    "2. Я знаю расстояние и скорость с которой я хочу бежать, но не знаю сколько времени это займёт\n" +
+                    "3. Я знаю сколько времени и с какой скоростью я хочу бежать, но не знаю какое расстояние я пробегу\n");
+            String choice2 = scan.nextLine();
+            if (RunningBot.StopWord(choice2)){
+                break;
+            }
+            switch (choice2) {
+                case "1" -> {
+                    setTotal_distance(AskDistance(ASK_SIMPLE_DISTANCE));
+                    set_Total_Time(AskTime_Simple_Training(getTotal_distance()));
+                    setAverage_TempoMS(PaceComputing(getTotal_distance(), get_Total_Time()));
+                    System.out.println("Для того что бы пробежать " + getTotal_distance() + " м. за " + Total_Time.get(0) + " ч. "
+                            + Total_Time.get(1) + " мин. " + Total_Time.get(2) + " сек. , Вам нужно бежать в темпе " + Average_TempoMS.get(0) + "'" + Average_TempoMS.get(1) + "'' на киллометр");
                     KnownParameters = true;
                 }
                 case "2" -> {
 
-                    setTotal_distance(AskDistance());
-                    setAverage_TempoMS(AskTempo(getTotal_distance()));
-                    setTime(TimeComputing(getTotal_distance(), getAverage_TempoMS()));
+                    setTotal_distance(AskDistance(ASK_SIMPLE_DISTANCE));
+                    setAverage_TempoMS(AskTempo_Simple_Training(getTotal_distance()));
+                    set_Total_Time(TimeComputing(getTotal_distance(), getAverage_TempoMS()));
                     KnownParameters = true;
                 }
                 case "3" -> {
-                    setTime(AskTime(getTotal_distance()));
-                    setAverage_TempoMS(AskTempo(getTotal_distance()));
-                    setTotal_distance(DistanceComputing(getTime(), getAverage_TempoMS()));
+                    set_Total_Time(AskTime_Simple_Training(getTotal_distance()));
+                    setAverage_TempoMS(AskTempo_Simple_Training(getTotal_distance()));
+                    setTotal_distance(DistanceComputing(get_Total_Time(), getAverage_TempoMS()));
                     KnownParameters = true;
                 }
                 default -> System.out.println("Выберите из предложенных вариантов. 1 для расчета скорости, 2 для расчета времени," +
@@ -153,11 +211,11 @@ public class SimpleWorkout {
             }
         } while(!KnownParameters);
     }
-    public long AskDistance(){
+    public long AskDistance(String TypeOfDistanceQuestion){
         boolean CorrectDistance=false;
         long distance = 0;
         do {
-            System.out.println("Какое расстояние Вы хотите пробежать? Введите расстояние в метрах");
+            System.out.println(TypeOfDistanceQuestion);
             Scanner scan = new Scanner(System.in);
             try {
                 distance = scan.nextLong();
@@ -170,7 +228,7 @@ public class SimpleWorkout {
         } while (!CorrectDistance);
         return distance;
     }
-    public ArrayList AskTime(Long distance){
+    public ArrayList AskTime_Simple_Training(Long distance){
         boolean CorrectTime=false;
         ArrayList <Integer> HMSNumeric= new ArrayList<>();
         ArrayList <String> HMSinMassive = new ArrayList<>();
@@ -210,7 +268,51 @@ public class SimpleWorkout {
         } while (!CorrectTime);
         return HMSNumeric;
     }
-    public ArrayList AskTempo(Long distance){
+    public ArrayList AskTime_WarmUp_CoolDown(Long distance){
+        boolean CorrectTime=false;
+        ArrayList <Integer> HMSNumeric= new ArrayList<>();
+        ArrayList <String> HMSinMassive = new ArrayList<>();
+        do{
+            try {
+                Scanner scan = new Scanner(System.in);
+                if (distance==0)
+                    System.out.println("Сколько времени Вы хотите уделить разминке?\n " +
+                            "(Такое же время будет установлено и для заминки)\n" +
+                            "Введите 3 числа через пробел.\n" +
+                            "Напиример 0 часов 35 минут 50 секунд нужно написать как 0 35 50");
+                else
+                    System.out.println("За какое время Вы хотите пробежать разминочные " + distance + " метров?\n" +
+                            "(Такое же время будет установлено и для заминки)\n" +
+                            "Введите 3 числа через пробел.\n" +
+                            "Напиример 0 часов 35 минут 50 секунд нужно написать как 0 35 50");
+                String HMSwithBlanks = scan.nextLine();
+
+                HMSinMassive = new ArrayList<>(Arrays.asList(HMSwithBlanks.split(" ")));
+                for (String myInt : HMSinMassive)
+                {
+                    HMSNumeric.add(Integer.valueOf(myInt));
+                }
+                if (HMSNumeric.size()<3) {
+                    System.out.println("Вы ввели недостаточное количество параметров. Вы ввели только:" + HMSNumeric);
+                    HMSNumeric.clear();
+                }
+                else if (HMSNumeric.size()>3){
+                    System.out.println("Вы ввели чрезмерное количество параметров. Вы ввели:" + HMSNumeric);
+                    HMSNumeric.clear();
+                }
+                else {
+                    System.out.println("Вы ввели все корректно");
+                    CorrectTime=true;
+                }
+            } catch (Exception t) {
+//                t.printStackTrace();
+                System.out.println("Каждое вводимое число должно быть натуральным и ввод должен соответствовать шаблону. Вы ввели: " + HMSinMassive);
+                HMSNumeric.clear();
+            }
+        } while (!CorrectTime);
+        return HMSNumeric;
+    }
+    public ArrayList AskTempo_Simple_Training(Long distance){
         boolean CorrectTempo=false;
         ArrayList <Integer> TempoMS = new ArrayList<>();
         ArrayList<String> TempoinMassive = new ArrayList<>();
@@ -222,6 +324,50 @@ public class SimpleWorkout {
                             "Где первое число это минуты а второе секунды\n"+ " Напиример темп 4'30'' нужно написать как 4 30");
                 else
                     System.out.println("В каком темпе Вы хотите пробежать " + distance + " метров? Введите 2 числа через пробел.\n" +
+                            "Где первое число это минуты а второе секунды\n"+ " Напиример темп 4'30'' нужно написать как 4 30");
+                String TempoMSwithBlanks = scan.nextLine();
+
+                TempoinMassive = new ArrayList<>(Arrays.asList(TempoMSwithBlanks.split(" ")));
+                for (String myInt : TempoinMassive)
+                {
+                    TempoMS.add(Integer.valueOf(myInt));
+                }
+                if (TempoMS.size()<2) {
+                    System.out.println("Вы ввели недостаточное количество параметров. Вы ввели только:" + TempoMS);
+                    TempoMS.clear();
+                }
+                else if (TempoMS.size()>2){
+                    System.out.println("Вы ввели чрезмерное количество параметров. Вы ввели:" + TempoMS);
+                    TempoMS.clear();
+                }
+                else {
+                    System.out.println("Вы ввели все корректно");
+                    CorrectTempo=true;
+                }
+            } catch (NumberFormatException t) {
+                t.printStackTrace();
+                System.out.println("Каждое вводимое число должно быть натуральным и ввод должен соответствовать шаблону. Вы ввели: " + TempoinMassive);
+                TempoMS.clear();
+            }
+        } while (!CorrectTempo);
+        return TempoMS;
+    }
+    public ArrayList AskTempo_WarmUp_CoolDown(Long distance){
+        boolean CorrectTempo=false;
+        ArrayList <Integer> TempoMS = new ArrayList<>();
+        ArrayList<String> TempoinMassive = new ArrayList<>();
+        do{
+            try {
+                Scanner scan = new Scanner(System.in);
+                if (distance==0)
+                    System.out.println("В каком темпе Вы хотите бежать на разминке?\n" +
+                            "(Такой же темп будет установлен и для заминки)\n" +
+                            "Введите 2 числа через пробел.\n" +
+                            "Где первое число это минуты а второе секунды\n"+ " Напиример темп 4'30'' нужно написать как 4 30");
+                else
+                    System.out.println("В каком темпе Вы хотите бежать на разминке в " + distance + " метров?\n" +
+                            "(Такой же темп будет установлен и для заминки)\n" +
+                            "Введите 2 числа через пробел.\n" +
                             "Где первое число это минуты а второе секунды\n"+ " Напиример темп 4'30'' нужно написать как 4 30");
                 String TempoMSwithBlanks = scan.nextLine();
 
