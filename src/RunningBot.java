@@ -29,6 +29,26 @@ public class RunningBot {
                         simpleWorkout.AskKnownParameters_WarmUp_CoolDown();
                     System.out.println(simpleWorkout.getHasWarmUpAndCoolDown());
                     simpleWorkout.AskKnownParameters_Training();
+                    System.out.println("Ваша тренировка:\n" +
+                            "Разминка:\n" +
+                            "  Расстояние - " + simpleWorkout.getWarmUp_CoolDown_distance() + " метров\n" +
+                            "  Время - " + simpleWorkout.getWarmUp_CoolDown_Time().get(0) + " ч." +
+                                           simpleWorkout.getWarmUp_CoolDown_Time().get(1) + " мин." +
+                                           simpleWorkout.getWarmUp_CoolDown_Time().get(2) + " сек.\n" +
+                            "  Темп - " +  simpleWorkout.getWarmUp_CoolDown_Average_TempoMS().get(0) + "'" +simpleWorkout.getWarmUp_CoolDown_Average_TempoMS().get(1) + "'' на киллометр\n" +
+                            "Тренировка:\n" +
+                            "  Расстояние - " + simpleWorkout.getHard_Training_distance() + " метров\n" +
+                            "  Время - " + simpleWorkout.getHard_Training_Time().get(0) + " ч." +
+                            simpleWorkout.getHard_Training_Time().get(1) + " мин." +
+                            simpleWorkout.getHard_Training_Time().get(2) + " сек.\n" +
+                            "  Темп - " +  simpleWorkout.getHard_Training_TempoMS().get(0) + "'" +simpleWorkout.getHard_Training_TempoMS().get(1) + "'' на киллометр\n" +
+                            "Заминка:\n" +
+                            "  Расстояние - " + simpleWorkout.getWarmUp_CoolDown_distance() + " метров\n" +
+                            "  Время - " + simpleWorkout.getWarmUp_CoolDown_Time().get(0) + " ч." +
+                            simpleWorkout.getWarmUp_CoolDown_Time().get(1) + " мин." +
+                            simpleWorkout.getWarmUp_CoolDown_Time().get(2) + " сек.\n" +
+                            "  Темп - " +  simpleWorkout.getWarmUp_CoolDown_Average_TempoMS().get(0) + "'" +simpleWorkout.getWarmUp_CoolDown_Average_TempoMS().get(1) + "'' на киллометр");
+                    System.out.println();
                     RunningTypeIsChosen = true;
                 }
                 case "2" -> {
