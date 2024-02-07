@@ -6,7 +6,7 @@ import java.util.Scanner;
 public class RunningBot {
     static String choice;
     static Scanner scan = new Scanner(System.in);
-    public void AskRunningType() {
+    public static void AskRunningType() {
         boolean RunningTypeIsChosen = false;
         do {
             System.out.println("Какой вид бега вы планируете использовать?\n" +
@@ -27,28 +27,35 @@ public class RunningBot {
                     simpleWorkout.setHasWarmUpAndCoolDown(simpleWorkout.AskWarmUpAndCoolDown());
                     if (simpleWorkout.getHasWarmUpAndCoolDown())
                         simpleWorkout.AskKnownParameters_WarmUp_CoolDown();
-                    System.out.println(simpleWorkout.getHasWarmUpAndCoolDown());
                     simpleWorkout.AskKnownParameters_Training();
-                    System.out.println("Ваша тренировка:\n" +
-                            "Разминка:\n" +
-                            "  Расстояние - " + simpleWorkout.getWarmUp_CoolDown_distance() + " метров\n" +
-                            "  Время - " + simpleWorkout.getWarmUp_CoolDown_Time().get(0) + " ч." +
-                                           simpleWorkout.getWarmUp_CoolDown_Time().get(1) + " мин." +
-                                           simpleWorkout.getWarmUp_CoolDown_Time().get(2) + " сек.\n" +
-                            "  Темп - " +  simpleWorkout.getWarmUp_CoolDown_Average_TempoMS().get(0) + "'" +simpleWorkout.getWarmUp_CoolDown_Average_TempoMS().get(1) + "'' на киллометр\n" +
+                    if (simpleWorkout.getHasWarmUpAndCoolDown()) {
+                        System.out.println("Ваша тренировка:\n" +
+                                "Разминка:\n" +
+                                "  Расстояние - " + simpleWorkout.getWarmUp_CoolDown_distance() + " метров\n" +
+                                "  Время - " + simpleWorkout.getWarmUp_CoolDown_Time().get(0) + " ч." +
+                                simpleWorkout.getWarmUp_CoolDown_Time().get(1) + " мин." +
+                                simpleWorkout.getWarmUp_CoolDown_Time().get(2) + " сек.\n" +
+                                "  Темп - " + simpleWorkout.getWarmUp_CoolDown_TempoMS().get(0) + "'" + simpleWorkout.getWarmUp_CoolDown_TempoMS().get(1) + "'' на киллометр\n");
+                    }
+                        System.out.println(
                             "Тренировка:\n" +
                             "  Расстояние - " + simpleWorkout.getHard_Training_distance() + " метров\n" +
                             "  Время - " + simpleWorkout.getHard_Training_Time().get(0) + " ч." +
                             simpleWorkout.getHard_Training_Time().get(1) + " мин." +
                             simpleWorkout.getHard_Training_Time().get(2) + " сек.\n" +
-                            "  Темп - " +  simpleWorkout.getHard_Training_TempoMS().get(0) + "'" +simpleWorkout.getHard_Training_TempoMS().get(1) + "'' на киллометр\n" +
-                            "Заминка:\n" +
-                            "  Расстояние - " + simpleWorkout.getWarmUp_CoolDown_distance() + " метров\n" +
-                            "  Время - " + simpleWorkout.getWarmUp_CoolDown_Time().get(0) + " ч." +
-                            simpleWorkout.getWarmUp_CoolDown_Time().get(1) + " мин." +
-                            simpleWorkout.getWarmUp_CoolDown_Time().get(2) + " сек.\n" +
-                            "  Темп - " +  simpleWorkout.getWarmUp_CoolDown_Average_TempoMS().get(0) + "'" +simpleWorkout.getWarmUp_CoolDown_Average_TempoMS().get(1) + "'' на киллометр");
-                    System.out.println();
+                            "  Темп - " +  simpleWorkout.getHard_Training_TempoMS().get(0) + "'" +simpleWorkout.getHard_Training_TempoMS().get(1) + "'' на киллометр\n");
+                    if (simpleWorkout.getHasWarmUpAndCoolDown()) {
+                        System.out.println(
+                                "Заминка:\n" +
+                                   "  Расстояние - " + simpleWorkout.getWarmUp_CoolDown_distance() + " метров\n" +
+                                   "  Время - " + simpleWorkout.getWarmUp_CoolDown_Time().get(0) + " ч." +
+                                                  simpleWorkout.getWarmUp_CoolDown_Time().get(1) + " мин." +
+                                                  simpleWorkout.getWarmUp_CoolDown_Time().get(2) + " сек.\n" +
+                                   "  Темп - " + simpleWorkout.getWarmUp_CoolDown_TempoMS().get(0) + "'" + simpleWorkout.getWarmUp_CoolDown_TempoMS().get(1) + "'' на киллометр\n" +
+                                "Общее время трениовки: " + simpleWorkout.get_Total_Time().get(0) + " ч. " + simpleWorkout.get_Total_Time().get(1) + " мин." + simpleWorkout.get_Total_Time().get(2) + " сек.\n" +
+                                "Общяя дистанция трениовки: " + simpleWorkout.getTotal_distance() + " метров\n" +
+                                "Средний Темп тренировки: " + simpleWorkout.getAverage_TempoMS().get(0) + "'" + simpleWorkout.getAverage_TempoMS().get(1) + "'' на киллометр");
+                    }
                     RunningTypeIsChosen = true;
                 }
                 case "2" -> {
@@ -56,9 +63,61 @@ public class RunningBot {
                     intervalWorkout.setHasWarmUpAndCoolDown(intervalWorkout.AskWarmUpAndCoolDown());
                     if (intervalWorkout.getHasWarmUpAndCoolDown())
                         intervalWorkout.AskKnownParameters_WarmUp_CoolDown();
-                    intervalWorkout.AskIntervalQuantity();
+                    intervalWorkout.setIntervals_quantity(intervalWorkout.AskIntervalQuantity());
                     intervalWorkout.AskKnownParameters_Training();
-                    System.out.println("В данный момент, к сожалению, данная функция не доступна\n");}
+                    intervalWorkout.AskKnownParameters_Rest();
+                    if (intervalWorkout.getHasWarmUpAndCoolDown()) {
+                        System.out.println("Ваша тренировка:\n" +
+                                "Разминка:\n" +
+                                "  Расстояние : " + intervalWorkout.getWarmUp_CoolDown_distance() + " метров\n" +
+                                "  Время : " + intervalWorkout.getWarmUp_CoolDown_Time().get(0) + " ч." +
+                                intervalWorkout.getWarmUp_CoolDown_Time().get(1) + " мин." +
+                                intervalWorkout.getWarmUp_CoolDown_Time().get(2) + " сек.\n" +
+                                "  Темп : " + intervalWorkout.getWarmUp_CoolDown_TempoMS().get(0) + "'" + intervalWorkout.getWarmUp_CoolDown_TempoMS().get(1) + "'' на киллометр\n");
+                    }
+                    System.out.println(
+                                "Тренировка:\n" +
+                                    "  Кол-во интервалов : " + intervalWorkout.getIntervals_quantity()  + "\n" +
+                                    "  Быстрые интервалы : \n"  +
+                                    "      Расстояние : " + intervalWorkout.getHard_Training_distance() + " метров\n" +
+                                    "      Время : " + intervalWorkout.getHard_Training_Time().get(0) + " ч." +
+                                           intervalWorkout.getHard_Training_Time().get(1) + " мин." +
+                                           intervalWorkout.getHard_Training_Time().get(2) + " сек.\n" +
+                                    "      Темп : " +  intervalWorkout.getHard_Training_TempoMS().get(0) + "'" +intervalWorkout.getHard_Training_TempoMS().get(1) + "'' на киллометр\n");
+                    if (intervalWorkout.getRest_distance() != 0) {
+                        System.out.println(
+                                        "  Медленные интервалы : \n"  +
+                                        "      Расстояние : " + intervalWorkout.getRest_distance() + " метров\n" +
+                                        "      Время : " + intervalWorkout.getRest_Time().get(0) + " ч." +
+                                               intervalWorkout.getRest_Time().get(1) + " мин." +
+                                               intervalWorkout.getRest_Time().get(2) + " сек.\n" +
+                                        "      Темп : " +  intervalWorkout.getRest_TempoMS().get(0) + "'" +intervalWorkout.getRest_TempoMS().get(1) + "'' на киллометр\n");
+                    }
+                    else { System.out.println(
+                            "  Отдых между интервалами : \n"  +
+                                    "      Время : " + intervalWorkout.getRest_Time().get(0) + " ч." +
+                                           intervalWorkout.getRest_Time().get(1) + " мин." +
+                                           intervalWorkout.getRest_Time().get(2) + " сек.\n");
+                    }
+//                            System.out.println(
+//                                "Общее время интервальной трениовки : " + intervalWorkout.get_Total_Time().get(0) + " ч. " + intervalWorkout.get_Total_Time().get(1) + " мин." + intervalWorkout.get_Total_Time().get(2) + " сек.\n" +
+//                                "Общяя дистанция интервальной трениовки : " + simpleWorkout.getTotal_distance() + " метров\n" +
+//                                "Средний Темп интервальной тренировки : " + simpleWorkout.getAverage_TempoMS().get(0) + "'" + simpleWorkout.getAverage_TempoMS().get(1) + "'' на киллометр");
+                    if (intervalWorkout.getHasWarmUpAndCoolDown()) {
+                        System.out.println(
+                                "Заминка:\n" +
+                                        "  Расстояние - " + intervalWorkout.getWarmUp_CoolDown_distance() + " метров\n" +
+                                        "  Время - " + intervalWorkout.getWarmUp_CoolDown_Time().get(0) + " ч." +
+                                        intervalWorkout.getWarmUp_CoolDown_Time().get(1) + " мин." +
+                                        intervalWorkout.getWarmUp_CoolDown_Time().get(2) + " сек.\n" +
+                                        "  Темп - " + intervalWorkout.getWarmUp_CoolDown_TempoMS().get(0) + "'" + intervalWorkout.getWarmUp_CoolDown_TempoMS().get(1) + "'' на киллометр\n");
+                    }
+                        System.out.println(
+                                "Общее время трениовки: " + intervalWorkout.get_Total_Time().get(0) + " ч. " + intervalWorkout.get_Total_Time().get(1) + " мин." + intervalWorkout.get_Total_Time().get(2) + " сек.\n" +
+                                "Общяя дистанция трениовки: " + intervalWorkout.getTotal_distance() + " метров\n" +
+                                "Средний Темп тренировки: " + intervalWorkout.getAverage_TempoMS().get(0) + "'" + intervalWorkout.getAverage_TempoMS().get(1) + "'' на киллометр");
+                    RunningTypeIsChosen = true;
+                }
                 default -> System.out.println("Выберите из предложенных вариантов. Введите цифрцу 1 для Равномерного бега" +
                         " и цифру 2 для Интервального\n");
             }
@@ -75,7 +134,6 @@ public class RunningBot {
         return false;
     }
     public static void main(String[] args) {
-        RunningBot NewRequest = new RunningBot();
-        NewRequest.AskRunningType();
+        AskRunningType();
     }
 }

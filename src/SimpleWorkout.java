@@ -5,7 +5,7 @@ import java.util.Scanner;
 public class SimpleWorkout {
     private long WarmUp_CoolDown_distance = 0;
     private ArrayList<Integer> WarmUp_CoolDown_Time = new ArrayList<>();
-    private ArrayList <Integer> WarmUp_CoolDown_Average_TempoMS = new ArrayList<>();
+    private ArrayList <Integer> WarmUp_CoolDown_TempoMS = new ArrayList<>();
     private long Hard_Training_distance = 0;
     private ArrayList<Integer> Hard_Training_Time = new ArrayList<>();
     private ArrayList <Integer> Hard_Training_TempoMS = new ArrayList<>();
@@ -21,7 +21,7 @@ public class SimpleWorkout {
                     "(такое же расстояние будет установлено и для заминки)" +
                     "? Введите расстояние в метрах";
     protected String ASK_TRAINING_DISTANCE =
-            "Какое расстояние Вы хотите пробежать на тренировке?";
+            "Какое расстояние Вы хотите пробежать на тренировке? Укажите расстояние в метрах";
 
     public SimpleWorkout () {}
 
@@ -32,33 +32,33 @@ public class SimpleWorkout {
         return HasWarmUpAndCoolDown;
     }
 
-    public void setTotal_distance(long total_distance) {
+    protected void setTotal_distance(long total_distance) {
         Total_distance = total_distance;
     }
-    public void setWarmUp_CoolDown_distance(long warmUp_CoolDown_distance) {
+    private void setWarmUp_CoolDown_distance(long warmUp_CoolDown_distance) {
         WarmUp_CoolDown_distance = warmUp_CoolDown_distance;
     }
-    public void setHard_Training_distance(long hard_Training_distance) {
+    protected void setHard_Training_distance(long hard_Training_distance) {
         Hard_Training_distance = hard_Training_distance;
     }
 
-    public void set_Total_Time(ArrayList<Integer> time) {
+    protected void set_Total_Time(ArrayList<Integer> time) {
         Total_Time = time;
     }
-    public void setWarmUp_CoolDown_Time(ArrayList<Integer> warmUp_CoolDown_Time) {
+    private void setWarmUp_CoolDown_Time(ArrayList<Integer> warmUp_CoolDown_Time) {
         WarmUp_CoolDown_Time = warmUp_CoolDown_Time;
     }
-    public void setHard_Training_Time(ArrayList<Integer> hard_Training_Time) {
+    protected void setHard_Training_Time(ArrayList<Integer> hard_Training_Time) {
         Hard_Training_Time = hard_Training_Time;
     }
 
-    public void setAverage_TempoMS(ArrayList<Integer> average_TempoMS) {
+    protected void setAverage_TempoMS(ArrayList<Integer> average_TempoMS) {
         Average_TempoMS = average_TempoMS;
     }
-    public void setWarmUp_CoolDown_Average_TempoMS(ArrayList<Integer> warmUp_CoolDown_Average_TempoMS) {
-        WarmUp_CoolDown_Average_TempoMS = warmUp_CoolDown_Average_TempoMS;
+    private void setWarmUp_CoolDown_TempoMS(ArrayList<Integer> warmUp_CoolDown_TempoMS) {
+        WarmUp_CoolDown_TempoMS = warmUp_CoolDown_TempoMS;
     }
-    public void setHard_Training_TempoMS(ArrayList<Integer> hard_Training_TempoMS) {
+    protected void setHard_Training_TempoMS(ArrayList<Integer> hard_Training_TempoMS) {
         Hard_Training_TempoMS = hard_Training_TempoMS;
     }
 
@@ -85,8 +85,8 @@ public class SimpleWorkout {
     public ArrayList<Integer> getAverage_TempoMS() {
         return Average_TempoMS;
     }
-    public ArrayList<Integer> getWarmUp_CoolDown_Average_TempoMS() {
-        return WarmUp_CoolDown_Average_TempoMS;
+    public ArrayList<Integer> getWarmUp_CoolDown_TempoMS() {
+        return WarmUp_CoolDown_TempoMS;
     }
     public ArrayList<Integer> getHard_Training_TempoMS() {
         return Hard_Training_TempoMS;
@@ -96,8 +96,6 @@ public class SimpleWorkout {
         double minutes = (HMSNumeric.get(0) * 60) + HMSNumeric.get(1) + ((double) HMSNumeric.get(2) / 60);
         double timeFor1km = TempoMS.get(0) + (double) TempoMS.get(1) / 60;
         long distance = (int) ((minutes/timeFor1km)*1000);
-//        System.out.println("Вы пробежите " + distance + " метров если будете бежать " + HMSNumeric.get(0)+ " часов "+ HMSNumeric.get(1)+
-//                " минут и "+ HMSNumeric.get(2) + " секунд в темпе " + TempoMS.get(0)+"'"+TempoMS.get(1)+"''" );
         return distance;
     }
     public ArrayList<Integer> TimeComputing(long distance, ArrayList<Integer> TempoMS ) {
@@ -111,15 +109,11 @@ public class SimpleWorkout {
             NettoMinutes= (int) Bruttominutes;
             double BruttoSec=Bruttominutes-NettoMinutes;
             Nettosec= (int) (0.6*(BruttoSec*100));
-//            System.out.println("Вам потребуется " + Hours +" часов " + NettoMinutes + " минут и " + Nettosec
-//                    +" секунд для того чтобы пробежать " + distance + " метров в темпе " + TempoMS.get(0)+"'"+TempoMS.get(1)+"''");
         }
         else {
             NettoMinutes= (int) BruttoTime;
             double BruttoSec=BruttoTime-NettoMinutes;
             Nettosec= (int) (0.6*(BruttoSec*100));
-//            System.out.println("Вам потребуется "+ NettoMinutes + " минут и " + Nettosec
-//                    +" секунд для того чтобы пробежать " + distance + " метров в темпе " + TempoMS.get(0)+"'"+TempoMS.get(1)+"''");
         }
         ArrayList <Integer> TimeHMS = new ArrayList<>();
         TimeHMS.add(Hours);
@@ -138,6 +132,16 @@ public class SimpleWorkout {
         TempoMS.add(sec);
         return TempoMS;
     }
+    public ArrayList<Integer> TotalTimeComputing(ArrayList<Integer> warmUp_CoolDown_Time, ArrayList<Integer> hard_Training_Time) {
+        int total_hour = 0;
+        int total_min = 0;
+        int total_sec;
+        total_sec = ((warmUp_CoolDown_Time.get(2) * 2) + hard_Training_Time.get(2)) % 60;
+        total_min = ((((warmUp_CoolDown_Time.get(2) * 2) + hard_Training_Time.get(2))/60) + (warmUp_CoolDown_Time.get(1) * 2) + hard_Training_Time.get(1)) % 60;
+        total_hour = (warmUp_CoolDown_Time.get(0) * 2) + hard_Training_Time.get(0) + ((((warmUp_CoolDown_Time.get(2) * 2) + hard_Training_Time.get(2))/60) + (warmUp_CoolDown_Time.get(1) * 2) + hard_Training_Time.get(1))/60;
+        ArrayList <Integer> Total_HMS = new ArrayList<>(Arrays.asList(total_hour,total_min,total_sec));
+        return Total_HMS;
+    }
     public boolean AskWarmUpAndCoolDown () {
         boolean CorrectAnswer = false;
         do {
@@ -151,6 +155,9 @@ public class SimpleWorkout {
                     return true;
                 }
                 case "2" -> {
+                    setWarmUp_CoolDown_distance(0);
+                    setWarmUp_CoolDown_TempoMS(new ArrayList<>(Arrays.asList(0,0)));
+                    setWarmUp_CoolDown_Time(new ArrayList<>(Arrays.asList(0,0,0)));
                     return false;
                 }
                 default -> System.out.println("Выберите из предложенных вариантов. 1 Если есть разминка и заминка 2 если разминки и заминки нет\n");
@@ -173,26 +180,26 @@ public class SimpleWorkout {
                 case "1" -> {
                     setWarmUp_CoolDown_distance(AskDistance(ASK_WARMUP_COOLDOWN_DISTANCE));
                     setWarmUp_CoolDown_Time(AskTime_WarmUp_CoolDown(getWarmUp_CoolDown_distance()));
-                    setWarmUp_CoolDown_Average_TempoMS(PaceComputing(getWarmUp_CoolDown_distance(), getWarmUp_CoolDown_Time()));
+                    setWarmUp_CoolDown_TempoMS(PaceComputing(getWarmUp_CoolDown_distance(), getWarmUp_CoolDown_Time()));
                     KnownParameters = true;
                 }
                 case "2" -> {
                     setWarmUp_CoolDown_distance(AskDistance(ASK_WARMUP_COOLDOWN_DISTANCE));
-                    setWarmUp_CoolDown_Average_TempoMS(AskTempo_WarmUp_CoolDown(getWarmUp_CoolDown_distance()));
-                    setWarmUp_CoolDown_Time(TimeComputing(getWarmUp_CoolDown_distance(), getWarmUp_CoolDown_Average_TempoMS()));
+                    setWarmUp_CoolDown_TempoMS(AskTempo_WarmUp_CoolDown(getWarmUp_CoolDown_distance()));
+                    setWarmUp_CoolDown_Time(TimeComputing(getWarmUp_CoolDown_distance(), getWarmUp_CoolDown_TempoMS()));
                     KnownParameters = true;
                 }
                 case "3" -> {
                     setWarmUp_CoolDown_Time(AskTime_WarmUp_CoolDown(getWarmUp_CoolDown_distance()));
-                    setWarmUp_CoolDown_Average_TempoMS(AskTempo_WarmUp_CoolDown(getWarmUp_CoolDown_distance()));
-                    setWarmUp_CoolDown_distance(DistanceComputing(getWarmUp_CoolDown_Time(), getWarmUp_CoolDown_Average_TempoMS()));
+                    setWarmUp_CoolDown_TempoMS(AskTempo_WarmUp_CoolDown(getWarmUp_CoolDown_distance()));
+                    setWarmUp_CoolDown_distance(DistanceComputing(getWarmUp_CoolDown_Time(), getWarmUp_CoolDown_TempoMS()));
                     KnownParameters = true;
                 }
                 default -> System.out.println("Выберите из предложенных вариантов. Если хотите выйти - введите q\n");
             }
         } while(!KnownParameters);
     }
-    public void AskKnownParameters_Training() {
+    protected void AskKnownParameters_Training() {
         boolean KnownParameters = false;
         do {
             System.out.println("Что Вы знаете о своей будущей тренировке?\n" +
@@ -208,26 +215,27 @@ public class SimpleWorkout {
                     setHard_Training_distance(AskDistance(ASK_TRAINING_DISTANCE));
                     setHard_Training_Time(AskTime_Simple_Training(getHard_Training_distance()));
                     setHard_Training_TempoMS(PaceComputing(getHard_Training_distance(), getHard_Training_Time()));
-                    setTotal_distance((getWarmUp_CoolDown_distance() * 2) + getHard_Training_distance());
-
                     KnownParameters = true;
                 }
                 case "2" -> {
 
-                    setTotal_distance(AskDistance(ASK_SIMPLE_DISTANCE));
-                    setAverage_TempoMS(AskTempo_Simple_Training(getTotal_distance()));
-                    set_Total_Time(TimeComputing(getTotal_distance(), getAverage_TempoMS()));
+                    setHard_Training_distance(AskDistance(ASK_TRAINING_DISTANCE));
+                    setHard_Training_TempoMS(AskTempo_Simple_Training(getHard_Training_distance()));
+                    setHard_Training_Time(TimeComputing(getHard_Training_distance(), getHard_Training_TempoMS()));
                     KnownParameters = true;
                 }
                 case "3" -> {
-                    set_Total_Time(AskTime_Simple_Training(getTotal_distance()));
-                    setAverage_TempoMS(AskTempo_Simple_Training(getTotal_distance()));
-                    setTotal_distance(DistanceComputing(get_Total_Time(), getAverage_TempoMS()));
+                    setHard_Training_Time(AskTime_Simple_Training(getHard_Training_distance()));
+                    setHard_Training_TempoMS(AskTempo_Simple_Training(getHard_Training_distance()));
+                    setHard_Training_distance(DistanceComputing(getHard_Training_Time(), getHard_Training_TempoMS()));
                     KnownParameters = true;
                 }
                 default -> System.out.println("Выберите из предложенных вариантов. 1 для расчета скорости, 2 для расчета времени," +
                         " 3 для расчета расстояния\n");
             }
+            setTotal_distance((getWarmUp_CoolDown_distance() * 2) + getHard_Training_distance());
+            set_Total_Time(TotalTimeComputing(getWarmUp_CoolDown_Time(),getHard_Training_Time()));
+            setAverage_TempoMS(PaceComputing(getTotal_distance(), get_Total_Time()));
         } while(!KnownParameters);
     }
     public long AskDistance(String TypeOfDistanceQuestion){
@@ -235,7 +243,7 @@ public class SimpleWorkout {
         long distance = 0;
         do {
             System.out.println(TypeOfDistanceQuestion);
-            if (getHasWarmUpAndCoolDown())
+            if (getHasWarmUpAndCoolDown() & TypeOfDistanceQuestion == ASK_TRAINING_DISTANCE)
                 System.out.println("(Без учета разминки и заминки)");
             Scanner scan = new Scanner(System.in);
             try {
